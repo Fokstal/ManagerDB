@@ -2,6 +2,7 @@
     x:Class="ManagerDB.View.AddNewValueWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:VM="clr-namespace:ManagerDB.ViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ManagerDB.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,6 +10,11 @@
     Width="300"
     Height="300"
     mc:Ignorable="d">
+
+    <Window.DataContext>
+        <VM:DataManageVM />
+    </Window.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
@@ -44,7 +50,7 @@
             Visibility="Hidden">
 
             <TextBlock Text="Name" />
-            <TextBox Text="" />
+            <TextBox Text="{Binding DepartmentName}" />
         </StackPanel>
 
         <StackPanel
@@ -57,13 +63,13 @@
             Visibility="Hidden">
 
             <TextBlock Text="Name" />
-            <TextBox Text="" />
+            <TextBox Text="{Binding PositionName}" />
 
             <TextBlock Text="Salary" />
-            <TextBox Text="" />
+            <TextBox Text="{Binding Salary}" />
 
             <TextBlock Text="Max of vacancies" />
-            <TextBox Text="" />
+            <TextBox Text="{Binding MaxOfVacancies}" />
 
             <TextBlock Text="Department" />
             <ComboBox />
@@ -79,13 +85,13 @@
             Visibility="Hidden">
 
             <TextBlock Text="Name" />
-            <TextBox Text="" />
+            <TextBox Text="{Binding UserName}" />
 
             <TextBlock Text="Surname" />
-            <TextBox Text="" />
+            <TextBox Text="{Binding Surname}" />
 
             <TextBlock Text="Phone" />
-            <TextBox Text="" />
+            <TextBox Text="{Binding Phone}" />
 
             <TextBlock Text="Position" />
             <ComboBox />

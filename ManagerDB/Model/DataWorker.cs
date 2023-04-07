@@ -79,6 +79,13 @@ namespace ManagerDB.Model
 
 			return result;
 		}
+		public static List<Department> GetAllDepartment()
+		{
+			using (ApplicationContext db = new ApplicationContext())
+			{
+				return db.Departments.ToList();
+			}
+		}
 
 		//Position
 		public static string CreateNewValue(string name, decimal salary, int maxNumber, Department department)
@@ -150,6 +157,13 @@ namespace ManagerDB.Model
 
 			return result;
 		}
+		public static List<Position> GetAllPosition()
+		{
+			using (ApplicationContext db = new ApplicationContext())
+			{
+				return db.Positions.ToList();
+			}
+		}
 
 		//User
 		public static string CreateNewValue(string name, string surname, string phone, Position position)
@@ -220,6 +234,13 @@ namespace ManagerDB.Model
 			}
 
 			return result;
+		}
+		public static List<User> GetAllUser()
+		{
+			using (ApplicationContext db = new ApplicationContext())
+			{
+				return db.Users.ToList();
+			}
 		}
 	}
 }
