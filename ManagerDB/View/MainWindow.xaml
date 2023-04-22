@@ -2,13 +2,19 @@
     x:Class="ManagerDB.View.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:VM="clr-namespace:ManagerDB.ViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ManagerDB.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="MainWindow"
+    Title="ManagerDB"
     Width="800"
     Height="450"
     mc:Ignorable="d">
+
+    <Window.DataContext>
+        <VM:DataManageVM/>
+    </Window.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -21,7 +27,7 @@
                     <TextBlock Text="Staff" />
                 </TabItem.Header>
 
-                <ListView>
+                <ListView ItemsSource="{Binding AllUsers}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Name" />
@@ -40,7 +46,7 @@
                     <TextBlock Text="Positions" />
                 </TabItem.Header>
 
-                <ListView>
+                <ListView ItemsSource="{Binding AllPositions}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Name" />
@@ -58,7 +64,7 @@
                     <TextBlock Text="Departmens" />
                 </TabItem.Header>
 
-                <ListView>
+                <ListView ItemsSource="{Binding AllDepartments}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Name" />
@@ -68,5 +74,24 @@
                 </ListView>
             </TabItem>
         </TabControl>
+
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+
+            <Button
+                x:Name="AddNewValueBtn"
+                Width="150"
+                Margin="15,0"
+                Command="{Binding OpenAddValueWindowCommand}"
+                Content="New value" />
+            <Button
+                x:Name="EditValueBtn"
+                Width="150"
+                Margin="15,0"
+                Command="{Binding EditValueWindowCommand}"
+                Content="Edit value" />
+        </StackPanel>
     </Grid>
 </Window>

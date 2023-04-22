@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ManagerDB.Model
 {
-    class Position
+    public class Position
     {
 		public int ID { get; set; }
 		public string Name { get => Name; set => Name = value; }
