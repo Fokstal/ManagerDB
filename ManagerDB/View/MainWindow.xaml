@@ -12,7 +12,7 @@
     mc:Ignorable="d">
 
     <Window.DataContext>
-        <VM:DataManageVM />
+        <VM:DataManageVM/>
     </Window.DataContext>
 
     <Grid>
@@ -81,11 +81,13 @@
             Orientation="Horizontal">
 
             <Button
+                x:Name="AddNewValueBtn"
                 Width="150"
                 Margin="15,0"
                 Command="{Binding OpenAddValueWindowCommand}"
                 Content="New value" />
             <Button
+                x:Name="EditValueBtn"
                 Width="150"
                 Margin="15,0"
                 Command="{Binding EditValueWindowCommand}"

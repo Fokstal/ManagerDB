@@ -1,35 +1,31 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ManagerDB.Data;
-using ManagerDB.Model;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManagerDB.Model
 {
 	public static class DataWorker
 	{
-		private static string codeUser = "user";
-		private static string codePosition = "position";
-		private static string codeDepartment = "department";
+		private static readonly string codeUser = "user";
+		private static readonly string codePosition = "position";
+		private static readonly string codeDepartment = "department";
 
 		//Department
-		public static string CreateNewValue(string name)
+		public static string AddNewValue(string? name)
 		{
 			string result = $"This {codeDepartment} exists";
 
-			using (ApplicationContext db = new ApplicationContext())
+			if (name is null) return "Your data contains null value!";
+
+			using (ApplicationContext db = new())
 			{
 				bool checkIsExist = db.Departments.Any(el => el.Name == name);
 
-				if (!checkIsExist)
+				if (!checkIsExist && name is not null)
 				{
-					Department newDepartment = new Department() { Name = name };
+					Department newDepartment = new() { Name = name };
 
 					db.Departments.Add(newDepartment);
 					db.SaveChanges();
@@ -88,9 +84,11 @@ namespace ManagerDB.Model
 		}
 
 		//Position
-		public static string CreateNewValue(string name, decimal salary, int maxNumber, Department department)
+		public static string AddNewValue(string? name, decimal salary, int maxNumber, Department? department)
 		{
 			string result = $"This {codePosition} exists";
+
+			if (name is null || department is null) return "Your data contains null value!";
 
 			using (ApplicationContext db = new ApplicationContext())
 			{
@@ -166,9 +164,11 @@ namespace ManagerDB.Model
 		}
 
 		//User
-		public static string CreateNewValue(string name, string surname, string phone, Position position)
+		public static string AddNewValue(string? name, string? surname, string? phone, Position? position)
 		{
 			string result = $"This {codeUser} exists";
+
+			if (name is null || surname is null || phone is null || position is null) return "Your data contains null value!";
 
 			using (ApplicationContext db = new ApplicationContext())
 			{
