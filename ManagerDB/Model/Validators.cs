@@ -7,7 +7,7 @@ namespace ManagerDB.Model
 	{
 		public static ValidatorName RulesForName(this string? name) => new(name);
 		public static ValidatorPhone RulesForPhone(this string? phone) => new(phone);
-		public static ValidatorNumber RulesForNumber(this string numberStr) => new(numberStr);
+		public static ValidatorNumber RulesForNumber(this string? numberStr) => new(numberStr);
 	}
 
 	public class BaseValidator
@@ -67,7 +67,7 @@ namespace ManagerDB.Model
 
 		public ValidatorPhone CheckMask()
 		{
-			if (_content is not null && !new Regex(@"\+\d+ \(\d{2}\) \d{3}-\d{2}-\d{2}").IsMatch(_content)) _success = false;
+			if (_content is not null && !new Regex(@"\+\d+ \d{9}").IsMatch(_content)) _success = false;
 
 			return this;
 		}
