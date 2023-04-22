@@ -5,8 +5,8 @@ namespace ManagerDB.Model
 {
 	public class RelayCommand : ICommand
 	{
-		private Action<object> execute;
-		private Func<object, bool>? canExecute;
+		private Action<object> _execute;
+		private Func<object, bool>? _canExecute;
 
 		public event EventHandler? CanExecuteChanged
 		{
@@ -16,19 +16,18 @@ namespace ManagerDB.Model
 
 		public RelayCommand(Action<object> execute, Func<object, bool>? canExecute = null)
 		{
-			this.execute = execute;
-			this.canExecute = canExecute;
+			_execute = execute;
+			_canExecute = canExecute;
 		}
 
 		public bool CanExecute(object? parameter)
 		{
-			if (parameter is not null) return this.canExecute == null || this.canExecute(parameter);
-			else return false;
+			return _canExecute == null || _canExecute(parameter);
 		}
 
 		public void Execute(object? parameter)
 		{
-			if (parameter is not null) this.execute(parameter);
+			_execute(parameter);
 		}
 	}
 }
