@@ -242,5 +242,39 @@ namespace ManagerDB.Model
 				return db.Users.ToList();
 			}
 		}
+
+
+		//Get Value by ID
+		public static Position? GetPosition(int id)
+		{
+			using (ApplicationContext db = new ApplicationContext())
+			{
+				return db.Positions.FirstOrDefault(o => o.ID == id);
+			}
+		}
+		public static Department? GetDepartment (int id)
+		{
+			using (ApplicationContext db = new ApplicationContext())
+			{
+				return db.Departments.FirstOrDefault(o => o.ID == id);
+			}
+		}
+
+		public static List<User>? GetAllUserById(int id)
+		{
+			using (ApplicationContext db = new())
+			{
+				return (from user in GetAllUser() where user.PositionID == id select user).ToList(); 
+			}
+		}
+
+		public static List<Position>? GetAllPositionById(int id)
+		{
+			using (ApplicationContext db = new())
+			{
+				return (from position in GetAllPosition() where position.DepartmentID == id select position).ToList();
+			}
+		}
+
 	}
 }

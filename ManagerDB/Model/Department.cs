@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,5 +14,8 @@ namespace ManagerDB.Model
 
         private List<Position>? _positions = new List<Position>();
 		public List<Position>? Positions { get => _positions; set => _positions = value; }
-    }
+
+		[NotMapped]
+		public List<Position>? PositionsOfDepartment { get => DataWorker.GetAllPositionById(ID); }
+	}
 }

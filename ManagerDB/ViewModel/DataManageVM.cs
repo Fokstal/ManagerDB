@@ -1,5 +1,6 @@
 ﻿using ManagerDB.Model;
 using ManagerDB.View;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
@@ -51,6 +52,7 @@ namespace ManagerDB.ViewModel
 
 		private AddNewValueWindow? _addNewValueWindow;
 
+		#region Department field
 		//Department
 		private string? _departmentName;
 		private bool _departmentNameValidate;
@@ -67,12 +69,12 @@ namespace ManagerDB.ViewModel
 				else MarkIsInvalid(_addNewValueWindow, "DepartmentNameTextBox");
 			}
 		}
+		#endregion
 
-
+		#region Position field
 		//Position
 		private string? _positionName;
 		private bool _positionNameValidate;
-
 		public string? PositionName
 		{
 			get => _positionName;
@@ -89,14 +91,13 @@ namespace ManagerDB.ViewModel
 
 		private string? _salary;
 		private bool _salaryValidate;
-
 		public string? Salary
 		{
 			get => _salary;
 			set
 			{
 				_salary = value;
-				_salaryValidate = _salary.RulesForNumber().IsNumber().Range(0, 100).Validate();
+				_salaryValidate = _salary.RulesForNumber().IsNumber().Range(400, 2500).Validate();
 
 				if (_salaryValidate) MarkIsValid(_addNewValueWindow, "SalaryTextBox");
 				else MarkIsInvalid(_addNewValueWindow, "SalaryTextBox");
@@ -106,14 +107,13 @@ namespace ManagerDB.ViewModel
 
 		private string? _maxOfVacansies;
 		private bool _maxOfVacansiesValidate;
-
 		public string? MaxOfVacansies
 		{
 			get => _maxOfVacansies;
 			set
 			{
 				_maxOfVacansies = value;
-				_maxOfVacansiesValidate = _maxOfVacansies.RulesForNumber().IsNumber().Range(0, 20).Validate();
+				_maxOfVacansiesValidate = _maxOfVacansies.RulesForNumber().IsNumber().Range(3, 30).Validate();
 
 				if (_maxOfVacansiesValidate) MarkIsValid(_addNewValueWindow, "MaxOfVacansiesTextBox");
 				else MarkIsInvalid(_addNewValueWindow, "MaxOfVacansiesTextBox");
@@ -121,10 +121,14 @@ namespace ManagerDB.ViewModel
 		}
 
 
+		private Department? _departmentOfPosition;
+		public Department? DepartmentOfPosition { get => _departmentOfPosition; set =>	_departmentOfPosition = value; }
+		#endregion
+
+		#region User field
 		//User
 		private string? _userName;
 		private bool _userNameValidate;
-
 		public string? UserName
 		{
 			get => _userName;
@@ -141,7 +145,6 @@ namespace ManagerDB.ViewModel
 
 		private string? _surname;
 		private bool _surnameValidate;
-
 		public string? Surname
 		{
 			get => _surname;
@@ -158,7 +161,6 @@ namespace ManagerDB.ViewModel
 
 		private string? _phone;
 		private bool _phoneValidate;
-
 		public string? Phone
 		{
 			get => _phone;
@@ -174,7 +176,14 @@ namespace ManagerDB.ViewModel
 			}
 		}
 
+
+		private Position? _positionOfUser;
+		public Position? PositionOfUser { get => _positionOfUser; set => _positionOfUser = value; }
 		#endregion
+
+
+		#endregion
+
 
 		private void MarkIsInvalid(Window? window, string nameControl)
 		{
@@ -196,6 +205,44 @@ namespace ManagerDB.ViewModel
 				controlBlock.BorderThickness = new Thickness(2);
 			}
 		}
+		private void SetToolTip(AddNewValueWindow window)
+		{
+			ToolTip toolTip_DepartmentName = new ToolTip();
+
+			ToolTip toolTip_PositionName = new ToolTip();
+			ToolTip toolTip_Salary = new ToolTip();
+			ToolTip toolTip_MaxOfVacansies = new ToolTip();
+
+			ToolTip toolTip_UserName = new ToolTip();
+			ToolTip toolTip_Surname = new ToolTip();
+			ToolTip toolTip_Phone = new ToolTip();
+
+			//Department ToolTip
+			toolTip_DepartmentName.Content = "Length (5..15)";
+			window.DepartmentNameTextBox.ToolTip = toolTip_DepartmentName;
+
+
+			//Position ToolTip
+			toolTip_PositionName.Content = "Length (5..15)";
+			window.PositionNameTextBox.ToolTip = toolTip_PositionName;
+
+			toolTip_Salary.Content = "Range (400..2500)";
+			window.SalaryTextBox.ToolTip = toolTip_Salary;
+
+			toolTip_MaxOfVacansies.Content = "Range (3..30)";
+			window.MaxOfVacansiesTextBox.ToolTip = toolTip_MaxOfVacansies;
+
+
+			//User ToolTip
+			toolTip_UserName.Content = "Length (10..20)";
+			window.UserNameTextBox.ToolTip = toolTip_UserName;
+
+			toolTip_Surname.Content = "Length (15..25)";
+			window.SurnameTextBox.ToolTip = toolTip_Surname;
+
+			toolTip_Phone.Content = "Mask: +_.._ __|___|__|__";
+			window.PhoneTextBox.ToolTip = toolTip_Phone;
+		}
 
 
 		#region Command for function DataWorker
@@ -207,16 +254,36 @@ namespace ManagerDB.ViewModel
 		{
 			get => _addNewValueCommand ?? new RelayCommand(o =>
 			{
-				string resultStr;
+				string resultStr = "";
 
 				_addNewValueWindow = o as AddNewValueWindow ?? new AddNewValueWindow();
-				var selectedItem = _addNewValueWindow.TypeAdditionComboBox.Items[_addNewValueWindow.TypeAdditionComboBox.SelectedIndex].ToString();
 
-				if (selectedItem != null && selectedItem.Contains("User")) resultStr = SubmitUserData();
-				if (selectedItem != null && selectedItem.Contains("Position")) resultStr = SubmitPositionData();
-				if (selectedItem != null && selectedItem.Contains("Department")) resultStr = SubmitDepartmentData();
+				SetToolTip(_addNewValueWindow);
 
-				MainWindowModel.UpdateAllListView(mainWindow);
+				object selectedItem = _addNewValueWindow.TypeAdditionComboBox.SelectedItem;
+				string? selectedItemStr = null;
+
+				if (selectedItem is not null) selectedItemStr = selectedItem.ToString();
+
+				if (selectedItemStr is not null)
+				{
+					if (selectedItemStr.Contains("User")) resultStr = SubmitUserData();
+					if (selectedItemStr.Contains("Position")) resultStr = SubmitPositionData();
+					if (selectedItemStr.Contains("Department")) resultStr = SubmitDepartmentData();
+				}
+
+				if (resultStr == "")
+				{
+					_addNewValueWindow.Close();
+					return;
+				}
+
+				if (!resultStr.Contains("not"))
+				{
+					MessageViewVM.ShowMessageView(resultStr);
+					MainWindowModel.UpdateAllListView(mainWindow);
+					_addNewValueWindow.Close();
+				}
 			});
 		}
 
@@ -226,17 +293,15 @@ namespace ManagerDB.ViewModel
 
 			if (_userNameValidate && _surnameValidate && _phoneValidate)
 			{
-				resultStr = DataWorker.AddNewValue(_userName, _surname, _phone, new Position());
+				resultStr = DataWorker.AddNewValue(_userName, _surname, _phone, _positionOfUser);
 
-				MessageViewVM.ShowMessageView(resultStr);
-
-				_addNewValueWindow?.Close();
 				return resultStr;
 			}
 
 			if (!_userNameValidate) MarkIsInvalid(_addNewValueWindow, "UserNameTextBox");
 			if (!_surnameValidate) MarkIsInvalid(_addNewValueWindow, "SurnameTextBox");
 			if (!_phoneValidate) MarkIsInvalid(_addNewValueWindow, "PhoneTextBox");
+			if (_positionOfUser is null && _addNewValueWindow is not null) MessageViewVM.ShowMessageView("Please, select POSITION!");
 
 			return resultStr;
 		}
@@ -246,17 +311,15 @@ namespace ManagerDB.ViewModel
 
 			if (_positionNameValidate && _salaryValidate && _maxOfVacansiesValidate)
 			{
-				resultStr = DataWorker.AddNewValue(_userName, _surname, _phone, new Position());
+				resultStr = DataWorker.AddNewValue(_positionName, Convert.ToDecimal(_salary), Convert.ToInt32(_maxOfVacansies), _departmentOfPosition);
 
-				MessageViewVM.ShowMessageView(resultStr);
-
-				_addNewValueWindow?.Close();
 				return resultStr;
 			}
 
-			if (!_userNameValidate) MarkIsInvalid(_addNewValueWindow, "PositionNameTextBox");
-			if (!_surnameValidate) MarkIsInvalid(_addNewValueWindow, "SalaryTextBox");
-			if (!_phoneValidate) MarkIsInvalid(_addNewValueWindow, "MaxOfVacansiesTextBox");
+			if (!_positionNameValidate) MarkIsInvalid(_addNewValueWindow, "PositionNameTextBox");
+			if (!_salaryValidate) MarkIsInvalid(_addNewValueWindow, "SalaryTextBox");
+			if (!_maxOfVacansiesValidate) MarkIsInvalid(_addNewValueWindow, "MaxOfVacansiesTextBox");
+			if (_departmentOfPosition is null && _addNewValueWindow is not null) MessageViewVM.ShowMessageView("Please, select DEPARTMENT!");
 
 			return resultStr;
 		}
@@ -268,9 +331,6 @@ namespace ManagerDB.ViewModel
 			{
 				resultStr = DataWorker.AddNewValue(_departmentName);
 
-				MessageViewVM.ShowMessageView(resultStr);
-
-				_addNewValueWindow?.Close();
 				return resultStr;
 			}
 

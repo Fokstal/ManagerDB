@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ManagerDB.Model
 {
@@ -17,5 +14,10 @@ namespace ManagerDB.Model
 		public List<User>? Users { get => _users; set => _users = value; }
 		public int DepartmentID { get; set; }
 		public virtual Department? Department { get; set; }
+
+		[NotMapped]
+		public Department? DepartmentOfPosition { get => DataWorker.GetDepartment(DepartmentID); }
+		[NotMapped]
+		public List<User>? UsersOfPosition { get => DataWorker.GetAllUserById(ID); }
 	}
 }

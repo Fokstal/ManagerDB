@@ -69,10 +69,14 @@
             <TextBox x:Name="SalaryTextBox" Text="{Binding Salary, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Text="Max of vacancies" />
-            <TextBox x:Name="MaxOfVacanciesTextBox" Text="{Binding MaxOfVacansies, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox x:Name="MaxOfVacansiesTextBox" Text="{Binding MaxOfVacansies, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Text="Department" />
-            <ComboBox />
+            <ComboBox
+                x:Name="DepartmentComboBox"
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding AllDepartments}"
+                SelectedItem="{Binding DepartmentOfPosition}" />
         </StackPanel>
 
         <StackPanel
@@ -94,7 +98,11 @@
             <TextBox x:Name="PhoneTextBox" Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Text="Position" />
-            <ComboBox />
+            <ComboBox
+                x:Name="PositionComboBox"
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding AllPositions}"
+                SelectedItem="{Binding PositionOfUser}" />
         </StackPanel>
 
         <Button
