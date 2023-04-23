@@ -22,7 +22,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Row="0">
+        <TabControl Grid.Row="0" SelectedItem="{Binding SelectedTabItem}">
             <TabItem Name="UsersTab">
                 <TabItem.Header>
                     <TextBlock Text="Staff" />
@@ -60,12 +60,24 @@
                 </ListView>
             </TabItem>
 
-            <TabItem Name="DepartmensTab">
+            <TabItem Name="DepartmentsTab">
                 <TabItem.Header>
                     <TextBlock Text="Departmens" />
                 </TabItem.Header>
 
-                <ListView x:Name="ListDepartmentsLV" ItemsSource="{Binding AllDepartments}">
+                <TabItem.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem
+                            Command="{Binding DeleteValue}"
+                            CommandParameter="{Binding ElementName=MainWind}"
+                            Header="Delete" />
+                    </ContextMenu>
+                </TabItem.ContextMenu>
+
+                <ListView
+                    x:Name="ListDepartmentsLV"
+                    ItemsSource="{Binding AllDepartments}"
+                    SelectedItem="{Binding SelectedDepartment}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />

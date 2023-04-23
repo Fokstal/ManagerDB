@@ -10,7 +10,7 @@ namespace ManagerDB.ViewModel
 
 		private static MessageViewWindow? messageViewWindow;
 
-		public static void ShowMessageView(string message)
+		public static void ShowMessageView(string? message)
 		{
 			_message = message;
 

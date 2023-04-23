@@ -184,6 +184,21 @@ namespace ManagerDB.ViewModel
 
 		#endregion
 
+		#region Value for selected field of MainWindow
+
+		private static TabItem? _selectedTabItem;
+		public static TabItem? SelectedTabItem { get => _selectedTabItem; set => _selectedTabItem = value; }
+
+		private static User? _selectedUser;
+		public static User? SelectedUser { get => _selectedUser; set => _selectedUser = value; }
+
+		private static Position? _selectedPosition;
+		public static Position? SelectedPosition { get => _selectedPosition; set => _selectedPosition = value; }
+
+		private static Department? _selectedDepartment;
+		public static Department? SelectedDepartment { get => _selectedDepartment; set => _selectedDepartment = value; }
+
+		#endregion
 
 		private void MarkIsInvalid(Window? window, string nameControl)
 		{
@@ -245,7 +260,7 @@ namespace ManagerDB.ViewModel
 		}
 
 
-		#region Command for function DataWorker
+		#region Command for addValue DataWorker
 
 		private static MainWindow? mainWindow;
 
@@ -341,6 +356,23 @@ namespace ManagerDB.ViewModel
 
 		#endregion
 
+		#region Command for delete DataWorker
+
+		private RelayCommand? _deleteValue = new (o => 
+		{
+			string resultStr = "Item not selected!";
+			mainWindow = o as MainWindow ?? new MainWindow();
+
+			MessageViewVM.ShowMessageView(_selectedDepartment?.Name);
+
+			if (_selectedTabItem?.Name == "DepartmentsTab" && _selectedDepartment != null) resultStr = DataWorker.DeleteValue(_selectedDepartment);
+
+			MainWindowModel.UpdateAllListView(mainWindow);
+			MessageViewVM.ShowMessageView(resultStr);
+		});
+		public RelayCommand? DeleteValue { get => _deleteValue; }
+
+		#endregion
 
 		#region Command for open Window
 
