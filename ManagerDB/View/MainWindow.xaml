@@ -6,13 +6,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ManagerDB.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="MainWind"
     Title="ManagerDB"
     Width="800"
     Height="450"
     mc:Ignorable="d">
 
     <Window.DataContext>
-        <VM:DataManageVM/>
+        <VM:DataManageVM />
     </Window.DataContext>
 
     <Grid>
@@ -27,7 +28,7 @@
                     <TextBlock Text="Staff" />
                 </TabItem.Header>
 
-                <ListView ItemsSource="{Binding AllUsers}">
+                <ListView x:Name="ListUsersLV" ItemsSource="{Binding AllUsers}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Name" />
@@ -46,7 +47,7 @@
                     <TextBlock Text="Positions" />
                 </TabItem.Header>
 
-                <ListView ItemsSource="{Binding AllPositions}">
+                <ListView x:Name="ListPositionsLV" ItemsSource="{Binding AllPositions}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Name" />
@@ -64,11 +65,11 @@
                     <TextBlock Text="Departmens" />
                 </TabItem.Header>
 
-                <ListView ItemsSource="{Binding AllDepartments}">
+                <ListView x:Name="ListDepartmentsLV" ItemsSource="{Binding AllDepartments}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Name" />
-                            <GridViewColumn Header="Count of position" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Positions.Count}" Header="Count of position" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -85,12 +86,14 @@
                 Width="150"
                 Margin="15,0"
                 Command="{Binding OpenAddValueWindowCommand}"
+                CommandParameter="{Binding ElementName=MainWind}"
                 Content="New value" />
             <Button
                 x:Name="EditValueBtn"
                 Width="150"
                 Margin="15,0"
                 Command="{Binding EditValueWindowCommand}"
+                CommandParameter="{Binding ElementName=MainWind}"
                 Content="Edit value" />
         </StackPanel>
     </Grid>

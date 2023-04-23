@@ -69,7 +69,7 @@
             <TextBox x:Name="SalaryTextBox" Text="{Binding Salary, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Text="Max of vacancies" />
-            <TextBox x:Name="MaxOfVacanciesTextBox" Text="{Binding MaxOfVacancies, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox x:Name="MaxOfVacanciesTextBox" Text="{Binding MaxOfVacansies, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Text="Department" />
             <ComboBox />

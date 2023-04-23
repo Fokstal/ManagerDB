@@ -1,15 +1,9 @@
 ﻿using ManagerDB.Model;
 using ManagerDB.View;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Media;
 
 namespace ManagerDB.ViewModel
@@ -182,8 +176,6 @@ namespace ManagerDB.ViewModel
 
 		#endregion
 
-		////Формы и системы оплаты труда.Состав фонда заработной платы
-
 		private void MarkIsInvalid(Window? window, string nameControl)
 		{
 			Control? controlBlock = window?.FindName(nameControl) as Control;
@@ -206,11 +198,11 @@ namespace ManagerDB.ViewModel
 		}
 
 
-		#region Command for function
+		#region Command for function DataWorker
 
+		private static MainWindow? mainWindow;
 
 		private RelayCommand? _addNewValueCommand;
-
 		public RelayCommand AddNewValueCommand
 		{
 			get => _addNewValueCommand ?? new RelayCommand(o =>
@@ -223,6 +215,8 @@ namespace ManagerDB.ViewModel
 				if (selectedItem != null && selectedItem.Contains("User")) resultStr = SubmitUserData();
 				if (selectedItem != null && selectedItem.Contains("Position")) resultStr = SubmitPositionData();
 				if (selectedItem != null && selectedItem.Contains("Department")) resultStr = SubmitDepartmentData();
+
+				MainWindowModel.UpdateAllListView(mainWindow);
 			});
 		}
 
@@ -232,9 +226,9 @@ namespace ManagerDB.ViewModel
 
 			if (_userNameValidate && _surnameValidate && _phoneValidate)
 			{
-				resultStr = "GOOD"; //DataWorker.AddNewValue(_userName, _surname, _phone, new Position());
+				resultStr = DataWorker.AddNewValue(_userName, _surname, _phone, new Position());
 
-				MessageBox.Show(resultStr);
+				MessageViewVM.ShowMessageView(resultStr);
 
 				_addNewValueWindow?.Close();
 				return resultStr;
@@ -246,16 +240,15 @@ namespace ManagerDB.ViewModel
 
 			return resultStr;
 		}
-
 		private string SubmitPositionData()
 		{
 			string resultStr = "Add new POSITION not success!";
 
 			if (_positionNameValidate && _salaryValidate && _maxOfVacansiesValidate)
 			{
-				resultStr = "GOOD!"; //DataWorker.AddNewValue(_userName, _surname, _phone, new Position());
+				resultStr = DataWorker.AddNewValue(_userName, _surname, _phone, new Position());
 
-				MessageBox.Show(resultStr);
+				MessageViewVM.ShowMessageView(resultStr);
 
 				_addNewValueWindow?.Close();
 				return resultStr;
@@ -267,16 +260,15 @@ namespace ManagerDB.ViewModel
 
 			return resultStr;
 		}
-
 		private string SubmitDepartmentData()
 		{
 			string resultStr = "Add new DEPARTMENT not success!";
 
 			if (_departmentNameValidate)
 			{
-				resultStr = "GOOD!"; DataWorker.AddNewValue(_departmentName);
+				resultStr = DataWorker.AddNewValue(_departmentName);
 
-				MessageBox.Show(resultStr);
+				MessageViewVM.ShowMessageView(resultStr);
 
 				_addNewValueWindow?.Close();
 				return resultStr;
@@ -290,29 +282,18 @@ namespace ManagerDB.ViewModel
 		#endregion
 
 
-		#region Command for buttons
+		#region Command for open Window
 
 		private RelayCommand? openAddValueWindowCommand;
 		public RelayCommand OpenAddValueWindowCommand
 		{
-			get => openAddValueWindowCommand ?? new RelayCommand(o => { OpenWindowInCenterPosition(new AddNewValueWindow()); });
+			get => openAddValueWindowCommand ?? new RelayCommand(o => { mainWindow = o as MainWindow ?? new MainWindow(); OpenWindowM.OpenWindowInCenterPosition(new AddNewValueWindow()); });
 		}
 
 		private RelayCommand? editValueWindowCommand;
 		public RelayCommand EditValueWindowCommand
 		{
-			get => editValueWindowCommand ?? new RelayCommand(o => { OpenWindowInCenterPosition(new EditValueWindow()); });
-		}
-
-		#endregion
-
-
-		#region Methods to open windows
-		private static void OpenWindowInCenterPosition(Window window)
-		{
-			window.Owner = Application.Current.MainWindow;
-			window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-			window.ShowDialog();
+			get => editValueWindowCommand ?? new RelayCommand(o => { mainWindow = o as MainWindow ?? new MainWindow(); OpenWindowM.OpenWindowInCenterPosition(new EditValueWindow()); });
 		}
 
 		#endregion
